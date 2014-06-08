@@ -1,9 +1,13 @@
 (ns me.arrdem.dogeon
-  (:require [instaparse.core :as insta]))
+  (:require [instaparse.core :as insta]
+            [clojure.java.io :as io]))
 
 (def dogeon-parser
   (insta/parser
-   (slurp "doge.bnf")))
+   (->> "doge.bnf"
+        io/resource
+        io/file
+        slurp)))
 
 (defn read8 [& digits]
   (reduce (fn [acc d] (+ d (* 8 acc)))
