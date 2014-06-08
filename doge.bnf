@@ -1,0 +1,79 @@
+object :=
+    < "such" > < "wow" >
+    | < "such" > <whitespace> pair <whitespace> (< obj-sep > <whitespace> pair <whitespace>) * < "wow" >
+
+obj-sep :=
+    < "," >
+    | < "." >
+    | < "!" >
+    | < "?" >
+
+pair := string <whitespace> < "is" > <whitespace> value
+
+array :=
+    < "so" > <whitespace> < "many" >
+    | < "so" > <whitespace> value <whitespace> ( < array-sep > <whitespace> value <whitespace>) * < "many" >
+
+array-sep :=
+    < "and" >
+    | < "also" >
+
+value :=
+    <whitespace> 
+    (string
+     | int
+     | object
+     | array
+     | "yes"
+     | "no"
+     | "empty")
+    <whitespace>
+
+string :=
+    < "\"\"" >
+    | < "\"" > char+ < "\"" >
+
+char :=
+    #"\\u[0-7]{6}"
+    | escaped-char
+    | #"[^\"]"
+
+escaped-char :=
+    "\\" "\\"
+    | "\\" "n"
+    | "\\" "b"
+    | "\\" "t"
+    | "\\" "\""
+    | "\\" "f"
+    | "\\" "r"
+
+int :=
+    positive
+    | negative
+
+negative :=
+    < "-" > positive
+
+positive :=
+    digits frac ? exp ?
+
+digits :=
+    digit1-7 digit *
+
+frac :=
+    "." digit +
+
+exp :=
+    very digit +
+
+very :=
+    ("very" | "VERY") #"[+-]"?
+
+digit :=
+    #"[0-7]"
+
+digit1-7 :=
+    #"[1-7]"
+
+whitespace =
+    #"[\s\n\r]*"
